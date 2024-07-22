@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Data</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Data</h1>
+    <table id="studentsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Student data will be inserted here -->
+        </tbody>
+    </table>
+    <script>
+        async function fetchStudents() {
+            try {
+                const response = await fetch('https://localhost:3001/api/students');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const students = await response.json();
+                const tableBody = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
+
+                students.forEach(student => {
+                    const row = tableBody.insertRow();
+                    const idCell = row.insertCell(0);
+                    const nameCell = row.insertCell(1);
+                    const ageCell = row.insertCell(2);
+                    const classCell = row.insertCell(3);
+
+                    idCell.textContent = student.id;
+                    nameCell.textContent = student.name;
+                    ageCell.textContent = student.age;
+                    classCell.textContent = student.class;
+                });
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                alert(`Failed to load student data: ${error.message}`);
+            }
+        }
+
+        fetchStudents();
+    </script>
+</body>
+</html>
